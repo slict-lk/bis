@@ -4,3 +4,7 @@ npx ts-node prisma/create-superadmin.ts
 
 vercel --prod
 vercel alias set erp-v01-gpxhgv5q6-mubasshirs-projects-c7f2e7ff.vercel.app slict
+
+github
+git commit -m "chore: initial commit"
+git push -u origin main
