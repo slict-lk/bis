@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: slict-erp-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: slicterp
+      POSTGRES_USER: slicterp
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme123}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - slict-erp-network
+
+  # Redis for caching (optional)
+  redis:
+    image: redis:7-alpine
+    container_name: slict-erp-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - slict-erp-network
+
+  # Main ERP Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: slict-erp-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://slicterp:${DB_PASSWORD:-changeme123}@postgres:5432/slicterp
+      NEXTAUTH_URL: http://localhost:3000
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-your-secret-key-here}
+      NODE_ENV: production
+    depends_on:
+      - postgres
+    networks:
+      - slict-erp-network
+
+  # Nginx reverse proxy (optional)
+  nginx:
+    image: nginx:alpine
+    container_name: slict-erp-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - app
+    networks:
+      - slict-erp-network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  slict-erp-network:
+    driver: bridge

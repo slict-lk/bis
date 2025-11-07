@@ -1,0 +1,6 @@
+npx prisma migrate reset --force --skip-seed
+npx ts-node prisma/create-tenant.ts
+npx ts-node prisma/create-superadmin.ts
+
+vercel --prod
+vercel alias set erp-v01-gpxhgv5q6-mubasshirs-projects-c7f2e7ff.vercel.app slict

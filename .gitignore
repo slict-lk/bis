@@ -1,0 +1,62 @@
+# Recommended .gitignore for Next.js / Node / TypeScript / Prisma project
+# Adjust entries if you intentionally track any of these files in your repo
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Next.js
+.next/
+out/
+.vercel/
+.vercel_build_output/
+
+# Builds
+dist/
+build/
+
+# TypeScript
+*.tsbuildinfo
+
+# Dependency directories
+.pnp/
+.pnp.js
+
+# Environment variables - keep env.example in repo
+.env
+.env.*.local
+.env.local
+
+# Prisma local env
+prisma/.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Editor directories and system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Debug & temp
+.cache/
+.parcel-cache/
+*.tgz
+
+# Docker
+docker-compose.override.yml
+
+# Misc
+.turbo/
+jest-results.json
