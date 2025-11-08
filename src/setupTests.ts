@@ -8,10 +8,21 @@ class MockResizeObserver {
 global.ResizeObserver = MockResizeObserver;
 
 // Mock for Radix UI components
-global.IntersectionObserver = class {
+global.IntersectionObserver = class IntersectionObserver {
+  constructor() {
+    this.root = null;
+    this.rootMargin = '0px';
+    this.thresholds = [0];
+  }
+  
+  root: Element | null;
+  rootMargin: string;
+  thresholds: number[];
+  
   observe() {}
   unobserve() {}
   disconnect() {}
+  takeRecords() { return []; }
 };
 
 // Add other global mocks as needed

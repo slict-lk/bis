@@ -5,9 +5,6 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
-  '@hookform/resolvers':
-    specifier: ^3.3.4
-    version: 3.10.0(react-hook-form@7.66.0)
   '@next-auth/prisma-adapter':
     specifier: ^1.0.7
     version: 1.0.7(@prisma/client@5.22.0)(next-auth@4.24.13)
@@ -95,9 +92,6 @@ dependencies:
   jsonwebtoken:
     specifier: ^9.0.2
     version: 9.0.2
-  lucide-react:
-    specifier: ^0.378.0
-    version: 0.378.0(react@18.3.1)
   mime-types:
     specifier: ^3.0.1
     version: 3.0.1
@@ -125,9 +119,6 @@ dependencies:
   react-flow-renderer:
     specifier: ^10.3.17
     version: 10.3.17(react-dom@18.3.1)(react@18.3.1)
-  react-hook-form:
-    specifier: ^7.51.0
-    version: 7.66.0(react@18.3.1)
   recharts:
     specifier: ^2.12.0
     version: 2.15.4(react-dom@18.3.1)(react@18.3.1)
@@ -146,14 +137,14 @@ dependencies:
   uuid:
     specifier: ^9.0.1
     version: 9.0.1
-  zod:
-    specifier: ^3.23.0
-    version: 3.25.76
   zustand:
     specifier: ^4.5.0
     version: 4.5.7(@types/react@18.3.26)(react@18.3.1)
 
 devDependencies:
+  '@hookform/resolvers':
+    specifier: ^3.10.0
+    version: 3.10.0(react-hook-form@7.66.0)
   '@testing-library/jest-dom':
     specifier: ^6.9.1
     version: 6.9.1
@@ -176,10 +167,10 @@ devDependencies:
     specifier: ^20.12.0
     version: 20.19.24
   '@types/react':
-    specifier: ^18.3.0
+    specifier: ^18.3.26
     version: 18.3.26
   '@types/react-dom':
-    specifier: ^18.3.0
+    specifier: ^18.3.7
     version: 18.3.7(@types/react@18.3.26)
   '@typescript-eslint/eslint-plugin':
     specifier: ^8.0.0
@@ -202,12 +193,18 @@ devDependencies:
   jest-environment-jsdom:
     specifier: ^30.2.0
     version: 30.2.0
+  lucide-react:
+    specifier: ^0.378.0
+    version: 0.378.0(react@18.3.1)
   postcss:
     specifier: ^8.4.0
     version: 8.5.6
   prisma:
     specifier: ^5.14.0
     version: 5.22.0
+  react-hook-form:
+    specifier: ^7.66.0
+    version: 7.66.0(react@18.3.1)
   tailwindcss:
     specifier: ^3.4.0
     version: 3.4.18
@@ -217,6 +214,9 @@ devDependencies:
   typescript:
     specifier: ^5.4.0
     version: 5.9.3
+  zod:
+    specifier: ^3.25.76
+    version: 3.25.76
 
 packages:
 
@@ -833,7 +833,7 @@ packages:
       react-hook-form: ^7.0.0
     dependencies:
       react-hook-form: 7.66.0(react@18.3.1)
-    dev: false
+    dev: true
 
   /@humanfs/core@0.19.1:
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -6395,7 +6395,7 @@ packages:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
     dependencies:
       react: 18.3.1
-    dev: false
+    dev: true
 
   /luxon@3.7.2:
     resolution: {integrity: sha512-vtEhXh/gNjI9Yg1u4jX/0YVPMvxzHuGgCm6tC5kZyb08yjGWGnqAjGJvcXbqQR2P3MyMEFnRbpcdFS6PBcLqew==}
@@ -7183,7 +7183,7 @@ packages:
       react: ^16.8.0 || ^17 || ^18 || ^19
     dependencies:
       react: 18.3.1
-    dev: false
+    dev: true
 
   /react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
@@ -8559,6 +8559,7 @@ packages:
 
   /zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
+    dev: true
 
   /zustand@3.7.2(react@18.3.1):
     resolution: {integrity: sha512-PIJDIZKtokhof+9+60cpockVOq05sJzHCriyvaLBmEJixseQ1a5Kdov6fWZfWOu5SK9c+FhH1jU0tntLxRJYMA==}

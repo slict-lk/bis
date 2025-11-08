@@ -40,7 +40,11 @@ interface UserFormProps {
   onCancel: () => void;
 }
 
-export default function UserForm({ initialData, onSubmit, onCancel }: UserFormProps) {
+export function UserForm({
+  initialData,
+  onSubmit,
+  onCancel,
+}: UserFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -193,17 +197,17 @@ export default function UserForm({ initialData, onSubmit, onCancel }: UserFormPr
               >
                 Role *
               </label>
-              <Select.Root id="role">
-                <Select.Trigger className="flex h-10 w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm">
-                  <Select.Value placeholder="Select a role" />
-                </Select.Trigger>
+              <Select defaultValue={initialData?.role || undefined}>
+                <SelectTrigger className="flex h-10 w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm">
+                  <SelectValue placeholder="Select a role" />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="ADMIN">Administrator</SelectItem>
                   <SelectItem value="MANAGER">Manager</SelectItem>
                   <SelectItem value="USER">User</SelectItem>
                   <SelectItem value="VIEWER">Viewer</SelectItem>
                 </SelectContent>
-              </Select.Root>
+              </Select>
               {errors.role && (
                 <p className="text-sm text-red-500 mt-1">{errors.role.message}</p>
               )}
