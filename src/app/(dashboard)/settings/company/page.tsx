@@ -132,18 +132,44 @@ export default function CompanySettingsPage() {
   useEffect(() => {
     const loadCompanyData = async () => {
       try {
-        setIsLoading(true);
         const response = await fetch('/api/settings/company');
         if (!response.ok) {
-          throw new Error('Failed to load company data');
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.error || `Failed to load company data (${response.status})`);
         }
         const data = await response.json();
+        if (!data) {
+          throw new Error('No company data received');
+        }
         form.reset(data);
       } catch (error) {
-        console.error('Failed to load company data:', error);
-        toast.error('Failed to load company data');
-      } finally {
-        setIsLoading(false);
+        console.error('Company data loading error:', error);
+        toast.error(error instanceof Error ? error.message : 'Failed to load company data');
+        // Set default values for the form
+        form.reset({
+          companyName: '',
+          legalName: '',
+          registrationNumber: '',
+          industry: '',
+          foundedYear: new Date().getFullYear().toString(),
+          website: '',
+          description: '',
+          email: '',
+          phone: '',
+          fax: '',
+          address: '',
+          city: '',
+          state: '',
+          postalCode: '',
+          country: '',
+          taxId: '',
+          vatNumber: '',
+          bankName: '',
+          accountName: '',
+          accountNumber: '',
+          routingNumber: '',
+          iban: '',
+        });
       }
     };
 

@@ -3,7 +3,6 @@ import prisma from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
 import { formatSuccessResponse } from '@/lib/error-handler';
 import { tryCatch } from '@/lib/error-handler';
-import { Tenant } from '@prisma/client';
 
 type BusinessHourEntry = {
   day: string;
@@ -110,7 +109,7 @@ export async function GET(request: NextRequest) {
     const user = await getCurrentUser();
     if (!user?.tenantId) {
       return NextResponse.json(
-        { error: 'Unauthorized' },
+        { error: 'Unauthorized - Please log in again' },
         { status: 401 }
       );
     }
@@ -119,7 +118,46 @@ export async function GET(request: NextRequest) {
       where: { id: user.tenantId },
     });
 
-    return NextResponse.json(normalizeCompanyResponse(tenant));
+    if (!tenant) {
+      return NextResponse.json(
+        { error: 'Company not found' },
+        { status: 404 }
+      );
+    }
+
+    // Parse the settings JSON
+    const settings = tenant.settings as TenantSettings || {};
+
+    // Initialize with default values, using tenant data where available
+    const responseData = {
+      companyName: tenant.companyName || '',
+      legalName: tenant.name || '',
+      registrationNumber: settings.registrationNumber || '',
+      industry: settings.industry || '',
+      foundedYear: settings.foundedYear || new Date().getFullYear().toString(),
+      website: tenant.domain || '',
+      description: settings.description || '',
+      email: settings.email || '',
+      phone: settings.phone || '',
+      fax: settings.fax || '',
+      address: settings.address || '',
+      city: settings.city || '',
+      state: settings.state || '',
+      postalCode: settings.postalCode || '',
+      country: settings.country || 'US',
+      taxId: settings.taxId || '',
+      vatNumber: settings.vatNumber || '',
+      bankName: settings.bankName || '',
+      accountName: settings.accountName || '',
+      accountNumber: settings.accountNumber || '',
+      routingNumber: settings.routingNumber || '',
+      iban: settings.iban || '',
+      businessHours: settings.businessHours || DEFAULT_BUSINESS_HOURS,
+      logo: tenant.logo || '',
+      primaryColor: tenant.primaryColor,
+    };
+
+    return NextResponse.json(responseData);
   }, 'Failed to fetch company settings');
 }
 
@@ -143,24 +181,53 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json() as Record<string, unknown>;
 
-    // Update tenant basic info
-    const updateData: Partial<Pick<Tenant, 'companyName' | 'name' | 'domain'>> = {
-      companyName: (body.companyName as string | undefined) || undefined,
-      name: (body.legalName as string | undefined) || (body.companyName as string | undefined) || undefined,
+    // Extract tenant basic info
+    const tenantUpdate = {
+      companyName: body.companyName as string,
+      name: body.legalName as string,
+      domain: body.website as string,
+      logo: body.logo as string,
     };
 
-    if (body.website) updateData.domain = body.website as string;
+    // Extract settings data
+    const settings: TenantSettings = {
+      registrationNumber: body.registrationNumber as string,
+      industry: body.industry as string,
+      foundedYear: body.foundedYear as string,
+      description: body.description as string,
+      email: body.email as string,
+      phone: body.phone as string,
+      fax: body.fax as string,
+      address: body.address as string,
+      city: body.city as string,
+      state: body.state as string,
+      postalCode: body.postalCode as string,
+      country: body.country as string,
+      taxId: body.taxId as string,
+      vatNumber: body.vatNumber as string,
+      bankName: body.bankName as string,
+      accountName: body.accountName as string,
+      accountNumber: body.accountNumber as string,
+      routingNumber: body.routingNumber as string,
+      iban: body.iban as string,
+      businessHours: body.businessHours as BusinessHourEntry[],
+    };
 
-    // Update tenant
-    await prisma.tenant.update({
+    // Update tenant with both basic info and settings
+    const updatedTenant = await prisma.tenant.update({
       where: { id: user.tenantId },
-      data: updateData,
+      data: {
+        ...tenantUpdate,
+        settings: settings,
+      },
     });
 
-    // Update or create tenant settings
-    // Note: In a production system, you'd want a proper TenantSettings model
-    // For now, we'll store additional data in the tenant record or a JSON field
-    // This is a simplified implementation
+    if (!updatedTenant) {
+      return NextResponse.json(
+        { error: 'Failed to update company settings' },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json(
       formatSuccessResponse({}, 'Company settings saved successfully')
